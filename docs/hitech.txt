@@ -1,0 +1,25 @@
+HITECH Act - Health Information Technology for Economic and Clinical Health Act
+
+Overview:
+The HITECH Act was enacted in 2009 as part of the American Recovery and Reinvestment Act (ARRA). It was designed to promote the adoption and meaningful use of health information technology, particularly Electronic Health Records (EHRs). HITECH significantly strengthened HIPAA's enforcement provisions and expanded the scope of privacy and security protections.
+
+Meaningful Use Program:
+HITECH established the Meaningful Use (MU) program, which provided financial incentives to healthcare providers who adopted certified EHR technology. The program had three stages: Stage 1 focused on data capture and sharing, Stage 2 on advanced clinical processes, and Stage 3 on improved outcomes. Eligible professionals could receive up to $44,000 through Medicare or $63,750 through Medicaid.
+
+Strengthened HIPAA Enforcement:
+HITECH introduced a tiered penalty structure for HIPAA violations based on the level of negligence: Tier 1 (unknowing) with penalties from $100 to $50,000 per violation; Tier 2 (reasonable cause) from $1,000 to $50,000; Tier 3 (willful neglect, corrected) from $10,000 to $50,000; and Tier 4 (willful neglect, not corrected) with a minimum of $50,000 per violation.
+
+Business Associate Liability:
+Before HITECH, only covered entities were directly liable for HIPAA violations. HITECH extended direct liability to business associates, meaning that vendors, contractors, and subcontractors who handle PHI are now directly subject to HIPAA's Security Rule and certain provisions of the Privacy Rule.
+
+Breach Notification Requirements:
+HITECH established mandatory breach notification requirements that were later incorporated into the HIPAA Breach Notification Rule. It requires individual notification within 60 days, HHS notification for breaches affecting 500 or more individuals, and media notification for breaches affecting 500 or more residents of a state or jurisdiction.
+
+Health Information Exchange (HIE):
+HITECH promoted the development of Health Information Exchanges to facilitate the electronic sharing of health information among organizations. The Act established the Office of the National Coordinator for Health Information Technology (ONC) to coordinate nationwide efforts to implement health IT and exchange electronic health information.
+
+State Attorney General Enforcement:
+HITECH granted state attorneys general the authority to bring civil actions on behalf of state residents for violations of HIPAA privacy and security provisions. This created an additional enforcement mechanism beyond the federal HHS Office for Civil Rights.
+
+Accounting of Disclosures:
+HITECH expanded patients' rights to receive an accounting of disclosures of their PHI from EHRs, including disclosures made for treatment, payment, and healthcare operations, which were previously exempt from the accounting requirement.

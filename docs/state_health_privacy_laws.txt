@@ -1,0 +1,28 @@
+State Health Privacy Laws in the United States
+
+Overview:
+While HIPAA establishes a federal floor for health information privacy, many states have enacted laws that provide additional protections. HIPAA's preemption provision states that state laws that are "contrary to" HIPAA are preempted, unless the state law is "more stringent" than HIPAA. This means that in practice, healthcare organizations must comply with both HIPAA and any applicable state laws that provide greater protection.
+
+California - Confidentiality of Medical Information Act (CMIA):
+The CMIA, enacted in 1981, is one of the most comprehensive state health privacy laws. It applies to healthcare providers, health plans, and contractors who handle medical information. Key provisions include: broader definition of covered entities than HIPAA; requirement for patient authorization before disclosure (with limited exceptions); statutory damages of $1,000 per violation plus actual damages; and criminal penalties of up to $250,000 and one year imprisonment. The CMIA also intersects with the California Consumer Privacy Act (CCPA), which exempts certain medical information already protected by CMIA.
+
+Texas - Texas Medical Records Privacy Act (HB 300):
+Texas enacted HB 300 in 2012, creating one of the strictest state health privacy frameworks. Key provisions include: training requirements for all employees who handle PHI; penalties of up to $1.5 million per year for covered entities; requirement for a covered entity to post a Notice of Privacy Practices and obtain acknowledgment; and additional restrictions on the sale of PHI beyond HIPAA requirements. Texas also requires state-specific consent forms for certain disclosures.
+
+New York - SHIELD Act and Mental Hygiene Law:
+New York's SHIELD Act (Stop Hacks and Improve Electronic Data Security Act) of 2019 expanded the definition of private information and imposed data security requirements on any business holding New Yorkers' private information. Additionally, New York Mental Hygiene Law Section 33.13 provides heightened protections for mental health records, requiring specific patient consent for disclosure and limiting disclosures even to other healthcare providers in many circumstances.
+
+Massachusetts - 201 CMR 17.00:
+Massachusetts has implemented comprehensive data security regulations under 201 CMR 17.00, which require organizations holding personal information of Massachusetts residents to develop, implement, and maintain a comprehensive information security program. For healthcare entities, this includes requirements for: encryption of transmitted records containing personal information; encryption of data on portable devices; monitoring of systems for unauthorized use; and up-to-date firewall protection and security patches.
+
+Washington State - My Health My Data Act:
+Enacted in 2023, Washington's My Health My Data Act is one of the newest and most expansive state health privacy laws. It applies broadly to any entity that collects, processes, or shares health data (not just HIPAA covered entities). Key provisions include: broad definition of consumer health data including data inferred about health; requirement for specific consent before collection, sharing, or sale of health data; private right of action for consumers; and prohibition on geofencing healthcare facilities for data collection.
+
+Illinois - Genetic Information Privacy Act (GIPA):
+Illinois has enacted specific protections for genetic information under GIPA, which restricts the collection, use, and disclosure of genetic information by employers, insurers, and other entities. Illinois also has the Biometric Information Privacy Act (BIPA), which, while not specific to healthcare, significantly impacts the use of biometric data (such as fingerprints for patient identification) by healthcare organizations.
+
+Multi-State Compliance Challenges:
+Healthcare organizations operating across multiple states face significant compliance challenges. They must: identify which state laws apply based on where patients reside; implement the most restrictive applicable standard when laws conflict; maintain different consent forms and processes for different jurisdictions; train staff on multiple regulatory frameworks; and update policies when new state laws are enacted or existing ones are amended.
+
+Preemption Analysis:
+When federal and state laws conflict, a preemption analysis must be conducted. Under HIPAA, state laws that are more stringent (provide greater privacy protections) are not preempted. However, determining which law is "more stringent" can be complex and often requires legal analysis on a provision-by-provision basis. Organizations typically adopt the most protective standard to ensure compliance with all applicable laws.

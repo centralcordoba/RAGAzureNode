@@ -1,0 +1,25 @@
+HIPAA - Health Insurance Portability and Accountability Act
+
+Overview:
+HIPAA was enacted in 1996 and is the foundational federal law governing the privacy and security of health information in the United States. It applies to covered entities (health plans, healthcare clearinghouses, and healthcare providers) and their business associates.
+
+Privacy Rule:
+The HIPAA Privacy Rule establishes national standards for the protection of individually identifiable health information, known as Protected Health Information (PHI). PHI includes any information about health status, provision of healthcare, or payment for healthcare that can be linked to an individual. The Privacy Rule gives patients rights over their health information, including the right to examine and obtain a copy of their health records, and to request corrections.
+
+Security Rule:
+The HIPAA Security Rule establishes a national set of security standards for protecting electronic Protected Health Information (ePHI). It requires covered entities to implement three types of safeguards: administrative safeguards (security management processes, workforce training, contingency plans), physical safeguards (facility access controls, workstation security, device and media controls), and technical safeguards (access controls, audit controls, integrity controls, transmission security).
+
+Breach Notification Rule:
+The Breach Notification Rule requires covered entities to notify affected individuals, the Secretary of HHS, and in some cases the media, following a breach of unsecured PHI. Notifications must be made without unreasonable delay and no later than 60 days from the discovery of the breach. A breach affecting 500 or more individuals must be reported to HHS immediately and posted on the HHS Breach Portal (commonly known as the Wall of Shame).
+
+Enforcement:
+HIPAA violations can result in civil monetary penalties ranging from $100 to $50,000 per violation, with an annual maximum of $1.5 million per violation category. Criminal penalties can include fines up to $250,000 and imprisonment up to 10 years for offenses committed with intent to sell, transfer, or use PHI for commercial advantage, personal gain, or malicious harm.
+
+Minimum Necessary Standard:
+HIPAA requires that covered entities make reasonable efforts to limit PHI to the minimum necessary to accomplish the intended purpose of the use, disclosure, or request. This applies to internal uses, routine disclosures, and requests for PHI.
+
+Business Associate Agreements (BAAs):
+When a covered entity uses a contractor or other non-workforce member to perform functions involving PHI, HIPAA requires a Business Associate Agreement. The BAA must establish the permitted uses and disclosures of PHI, require the business associate to safeguard the information, and require the business associate to report any breaches.
+
+Patient Rights:
+Under HIPAA, patients have the right to: access their medical records, request amendments to their records, receive an accounting of disclosures, request restrictions on certain uses and disclosures, request confidential communications, and file complaints with the covered entity or HHS.

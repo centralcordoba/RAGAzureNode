@@ -1,0 +1,25 @@
+42 CFR Part 2 - Confidentiality of Substance Use Disorder Patient Records
+
+Overview:
+42 CFR Part 2 is a federal regulation that protects the confidentiality of substance use disorder (SUD) patient records. Originally enacted in the 1970s, it applies to federally assisted programs that provide alcohol and drug abuse diagnosis, treatment, or referral for treatment. The regulation is stricter than HIPAA in many respects and was designed to encourage individuals to seek treatment without fear of legal consequences.
+
+Scope and Applicability:
+Part 2 applies to any program that is federally assisted (receives federal funding, is registered to dispense controlled substances for SUD treatment, or is operated by a federal department or agency) AND holds itself out as providing alcohol or drug abuse diagnosis, treatment, or referral for treatment. This includes hospitals, clinics, private practitioners, and employee assistance programs that meet these criteria.
+
+Consent Requirements:
+Part 2 requires written patient consent for most disclosures of SUD records. The consent must include: the name of the patient, the name of the program making the disclosure, the name of the recipient, the purpose of the disclosure, how much and what kind of information will be disclosed, a statement that the patient may revoke consent at any time, the date or condition upon which the consent expires, and the signature of the patient.
+
+Re-disclosure Prohibition:
+A critical feature of Part 2 is the prohibition on re-disclosure. When SUD records are disclosed with patient consent, the recipient receives a written notice stating: "This information has been disclosed to you from records protected by federal confidentiality rules (42 CFR Part 2). The federal rules prohibit you from making any further disclosure of information in this record that identifies a patient as having or having had a substance use disorder."
+
+Exceptions to Consent:
+Part 2 allows disclosure without consent in limited circumstances: medical emergencies, qualified research activities, audits and evaluations, court orders (with specific requirements stricter than a subpoena), crimes committed on program premises or against program personnel, and reporting of suspected child abuse or neglect.
+
+2024 Final Rule Updates:
+In 2024, significant updates were made to align Part 2 more closely with HIPAA. Key changes include: allowing the use and disclosure of Part 2 records for treatment, payment, and healthcare operations (TPO) based on a single consent; applying HIPAA breach notification requirements to Part 2 records; prohibiting the use of Part 2 records in criminal, civil, or administrative proceedings against patients; and establishing antidiscrimination protections.
+
+Relationship with HIPAA:
+Part 2 is more restrictive than HIPAA for SUD records. Where HIPAA allows disclosure of PHI for treatment, payment, and healthcare operations without patient authorization, Part 2 historically required specific written consent for virtually all disclosures. The 2024 updates have harmonized some aspects, but Part 2 records still carry additional protections, particularly regarding re-disclosure and use in legal proceedings.
+
+Penalties:
+Violations of Part 2 can result in criminal penalties. For a first offense, fines can be up to $500. For subsequent offenses, fines can be up to $5,000. These penalties are per violation and are in addition to any applicable HIPAA penalties if the entity is also a HIPAA covered entity.

@@ -1,0 +1,28 @@
+FDA 21 CFR Part 11 - Electronic Records and Electronic Signatures
+
+Overview:
+21 CFR Part 11 is an FDA regulation that establishes the criteria under which electronic records and electronic signatures are considered trustworthy, reliable, and equivalent to paper records and handwritten signatures. It was published in 1997 and applies to all FDA-regulated industries, including pharmaceuticals, medical devices, biologics, and food.
+
+Scope:
+Part 11 applies to records in electronic form that are created, modified, maintained, archived, retrieved, or transmitted under any FDA records requirements. It also applies to electronic signatures used in lieu of traditional handwritten signatures. The regulation applies to both open systems (accessible to people who are not responsible for the content) and closed systems (access controlled by the persons responsible for the content).
+
+Electronic Records Requirements:
+For electronic records to be considered valid under Part 11, systems must include: validation of the system to ensure accuracy, reliability, and consistent intended performance; the ability to generate accurate and complete copies of records in both human-readable and electronic form; protection of records to enable their accurate and ready retrieval throughout the records retention period; limiting system access to authorized individuals; use of secure, computer-generated, time-stamped audit trails; use of authority checks to ensure only authorized individuals can use the system; and device checks to determine the validity of the source of data input.
+
+Audit Trail Requirements:
+Part 11 requires that systems include secure, computer-generated, time-stamped audit trails that independently record the date and time of operator entries and actions. The audit trail must capture who made a change, what was changed, when it was changed, and why it was changed. Audit trail documentation must be retained for a period at least as long as that required for the subject electronic records and must be available for agency review and copying.
+
+Electronic Signature Requirements:
+Electronic signatures under Part 11 must: be unique to one individual and not reused or reassigned; be verified before establishing, assigning, certifying, or otherwise sanctioning an individual's electronic signature; require at least two distinct identification components (such as user ID and password); and be used only by their genuine owner.
+
+Open vs Closed Systems:
+Closed systems are those where access is controlled by persons responsible for the content. Open systems have additional requirements including document encryption, use of digital signature standards, and additional controls to ensure record authenticity, integrity, and confidentiality.
+
+Risk-Based Approach:
+The FDA has adopted a risk-based approach to Part 11 enforcement, focusing on records that are required by predicate rules (underlying regulations that require records to be maintained). The FDA guidance from 2003 clarified that the agency intends to exercise enforcement discretion regarding certain Part 11 requirements, focusing primarily on audit trails, electronic copies, and record retention.
+
+Relationship with Predicate Rules:
+Part 11 does not impose new record-keeping requirements. Instead, it provides the framework for when electronic records can be used to satisfy existing record-keeping requirements (predicate rules). If a predicate rule requires a signature, Part 11 defines when an electronic signature can be used instead of a handwritten one.
+
+Common Applications:
+Part 11 is particularly relevant in: clinical trial data management, laboratory information management systems (LIMS), manufacturing execution systems (MES), quality management systems (QMS), electronic batch records, adverse event reporting systems, and any system that generates records submitted to the FDA.
