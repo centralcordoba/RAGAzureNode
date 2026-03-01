@@ -4,7 +4,8 @@ An AI-powered assistant that answers questions about US healthcare regulations u
 
 **Live demo:** [ragfrontend.gentlerock-23836e73.westus2.azurecontainerapps.io](https://ragfrontend.gentlerock-23836e73.westus2.azurecontainerapps.io)
 
-![Healthcare RAG Demo](docs/demo.png)
+<img width="701" height="442" alt="image" src="https://github.com/user-attachments/assets/f375f128-31a2-4f46-9fa6-3699460f5253" />
+
 
 ## How It Works
 
