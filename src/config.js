@@ -5,18 +5,18 @@ const config = {
   openRouterApiKey: process.env.OPENROUTER_API_KEY,
   openRouterBaseUrl: "https://openrouter.ai/api/v1",
 
-  // Azure OpenAI (Embeddings) - custom prefix to avoid LangChain auto-detection
-  azureEmbedKey: process.env.AZURE_EMBED_KEY,
-  azureEmbedEndpoint: process.env.AZURE_EMBED_ENDPOINT,
-  azureEmbedDeployment: process.env.AZURE_EMBED_DEPLOYMENT,
+  // Azure OpenAI (Embeddings) - reads EMBED_* or AZURE_EMBED_* (Azure Container Apps blocks "AZURE_" prefix)
+  azureEmbedKey: process.env.EMBED_KEY || process.env.AZURE_EMBED_KEY,
+  azureEmbedEndpoint: process.env.EMBED_ENDPOINT || process.env.AZURE_EMBED_ENDPOINT,
+  azureEmbedDeployment: process.env.EMBED_DEPLOYMENT || process.env.AZURE_EMBED_DEPLOYMENT,
 
   // OpenRouter (Chat LLM) - free model to minimize cost
   chatModel: "mistralai/mistral-nemo",
 
-  // Azure AI Search
-  azureSearchEndpoint: process.env.AZURE_SEARCH_ENDPOINT,
-  azureSearchKey: process.env.AZURE_SEARCH_KEY,
-  azureSearchIndex: process.env.AZURE_SEARCH_INDEX || "healthcare-regulations",
+  // Azure AI Search - reads SEARCH_* or AZURE_SEARCH_* (Azure Container Apps blocks "AZURE_" prefix)
+  azureSearchEndpoint: process.env.SEARCH_ENDPOINT || process.env.AZURE_SEARCH_ENDPOINT,
+  azureSearchKey: process.env.SEARCH_KEY || process.env.AZURE_SEARCH_KEY,
+  azureSearchIndex: process.env.SEARCH_INDEX || process.env.AZURE_SEARCH_INDEX || "healthcare-regulations",
 
   // RAG settings
   chunkSize: 500,       // characters per chunk

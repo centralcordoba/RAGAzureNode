@@ -570,6 +570,292 @@ TOTAL:
 
 ---
 
+## Deploy a Azure Container Apps — Paso a paso
+
+### Arquitectura desplegada
+
+```
+Internet
+   │
+   ├── https://ragfrontend.gentlerock-23836e73.westus2.azurecontainerapps.io
+   │         │
+   │         ▼
+   │   ┌──────────────────────────────────────────────┐
+   │   │  Azure Container Apps Environment (rag-env)   │
+   │   │                                               │
+   │   │  ┌─────────────┐      ┌──────────────────┐   │
+   │   │  │ ragfrontend  │      │ ragbackend       │   │
+   │   │  │ Next.js      │      │ Express + RAG    │   │
+   │   │  │ Puerto 3000  │      │ Puerto 3001      │   │
+   │   │  │ 0.25 vCPU    │      │ 0.25 vCPU        │   │
+   │   │  │ 0.5 GiB      │      │ 0.5 GiB          │   │
+   │   │  └─────────────┘      └──────┬───────────┘   │
+   │   │                               │               │
+   │   └───────────────────────────────┼───────────────┘
+   │                                   │
+   ├── https://ragbackend.gentlerock-23836e73.westus2.azurecontainerapps.io
+   │                                   │
+   │                    ┌──────────────┼──────────────┐
+   │                    ▼              ▼              ▼
+   │              Azure OpenAI    Azure AI      OpenRouter
+   │              (embeddings)    Search        (Mistral Nemo)
+   │
+   └── Azure Container Registry (acrragpoc2026)
+              └── rag-backend:v2
+              └── rag-frontend:v2
+```
+
+### Requisitos previos
+
+- **Docker Desktop** instalado y corriendo
+- **Azure CLI** instalado (`winget install Microsoft.AzureCLI`)
+- **Cuenta de Azure** con suscripción activa
+- Providers registrados: `Microsoft.ContainerRegistry` y `Microsoft.App`
+
+### Qué es un Resource Provider
+
+Los **providers** son módulos que habilitan servicios dentro de tu suscripción de Azure. Cada servicio pertenece a un provider:
+
+```
+Microsoft.ContainerRegistry  → habilita Container Registry (ACR)
+Microsoft.App                → habilita Container Apps
+Microsoft.Search             → habilita Azure AI Search
+Microsoft.CognitiveServices  → habilita Azure OpenAI
+```
+
+Cuando creas un recurso por primera vez, Azure generalmente registra el provider automáticamente. A veces no, y te da el error `MissingSubscriptionRegistration`. Se registran desde:
+
+**Portal:** Suscripciones → tu suscripción → Configuración → Proveedores de recursos → buscar → Registrar
+
+### Paso 1 — Login a Azure
+
+```bash
+az login
+```
+
+Abre el browser, seleccionas tu cuenta, y vuelves a la terminal.
+
+### Paso 2 — Crear Azure Container Registry (ACR)
+
+**Desde el portal Azure:**
+
+1. Buscar **"Container registries"** → **Crear**
+2. Configurar:
+
+| Campo | Valor |
+|-------|-------|
+| Grupo de recursos | `rg-rag-poc` |
+| Nombre del registro | `acrragpoc2026` |
+| Ubicación | `East US 2` |
+| Plan de precios | **Basic** (~$5/mes) |
+
+3. Revisar y crear
+
+### Paso 3 — Build, tag y push de imágenes
+
+**Desde la terminal (este paso no se puede hacer desde el portal):**
+
+```bash
+# Login de Docker al ACR
+az acr login --name acrragpoc2026
+
+# --- Backend ---
+# Build
+docker compose build backend
+
+# Tag para ACR
+docker tag ragazurenode-backend acrragpoc2026.azurecr.io/rag-backend:v2
+
+# Push
+docker push acrragpoc2026.azurecr.io/rag-backend:v2
+
+# --- Frontend ---
+# Build con la URL del backend de Azure (se obtiene después de crear el backend)
+cd frontend
+docker build --build-arg NEXT_PUBLIC_API_URL=https://ragbackend.gentlerock-23836e73.westus2.azurecontainerapps.io -t ragazurenode-frontend:azure .
+cd ..
+
+# Tag para ACR
+docker tag ragazurenode-frontend:azure acrragpoc2026.azurecr.io/rag-frontend:v2
+
+# Push
+docker push acrragpoc2026.azurecr.io/rag-frontend:v2
+```
+
+**¿Por qué tag y push?**
+- `docker tag` le pone un nombre que incluye la URL del registry (`acrragpoc2026.azurecr.io/...`)
+- `docker push` sube la imagen a ese registry
+- Sin el tag correcto, Docker no sabe a dónde enviarlo
+
+**¿Por qué el frontend necesita dos builds?**
+- `v1` se construyó con `NEXT_PUBLIC_API_URL=http://localhost:3001` (solo funciona local)
+- `v2` se construyó con la URL real de Azure. Como Next.js inyecta variables `NEXT_PUBLIC_*` en **build time**, hay que rebuild cuando cambia la URL del backend
+
+### Paso 4 — Crear Container App del backend
+
+**Desde el portal Azure:**
+
+1. Buscar **"Container Apps"** → **Crear**
+2. Datos básicos:
+
+| Campo | Valor |
+|-------|-------|
+| Grupo de recursos | `rg-rag-poc` |
+| Nombre | `ragbackend` |
+| Origen de implementación | Imagen de contenedor |
+| Región | `West US 2` |
+| Entorno de Container Apps | **Crear nuevo** → nombre: `rag-env`, plan: **Consumption only** |
+
+3. Contenedor:
+
+| Campo | Valor |
+|-------|-------|
+| Origen de la imagen | **Azure Container Registry** |
+| Registro | `acrragpoc2026` |
+| Imagen | `rag-backend` |
+| Etiqueta de imagen | `v2` |
+| CPU y memoria | **0.25 vCPU, 0.5 GiB** |
+
+4. Variables de entorno (en la misma pestaña de Contenedor):
+
+| Name | Value |
+|------|-------|
+| `OPENROUTER_API_KEY` | (tu key de OpenRouter) |
+| `EMBED_KEY` | (tu key de Azure OpenAI) |
+| `EMBED_ENDPOINT` | `https://openai-rag-poc-em2026.openai.azure.com/` |
+| `EMBED_DEPLOYMENT` | `text-embedding-3-small` |
+| `SEARCH_ENDPOINT` | `https://search-rag-poc-em2026.search.windows.net` |
+| `SEARCH_KEY` | (tu key de Azure AI Search) |
+| `SEARCH_INDEX` | `healthcare-regulations` |
+
+5. Entrada (Ingress):
+
+| Campo | Valor |
+|-------|-------|
+| Entrada | **Habilitado** |
+| Tráfico de entrada | **Aceptar tráfico desde cualquier lugar** |
+| Tipo de entrada | **HTTP** |
+| Puerto de destino | **3001** |
+
+6. Revisar y crear
+
+### Gotcha: Azure Container Apps bloquea el prefijo "AZURE_" en variables de entorno
+
+Azure Container Apps **no permite** nombres de variables que empiecen con `AZURE_`, `MICROSOFT_` o `WINDOWS_` — son prefijos reservados del sistema.
+
+**Problema:** Nuestro `.env` local usa `AZURE_EMBED_KEY`, `AZURE_SEARCH_ENDPOINT`, etc.
+
+**Solución:** En `config.js` configuramos fallbacks que aceptan ambos nombres:
+
+```javascript
+// Acepta EMBED_KEY (Azure Container Apps) o AZURE_EMBED_KEY (local .env)
+azureEmbedKey: process.env.EMBED_KEY || process.env.AZURE_EMBED_KEY,
+```
+
+Así el mismo código funciona en local (con `AZURE_EMBED_KEY` del `.env`) y en Azure Container Apps (con `EMBED_KEY`).
+
+### Gotcha: No confundir Etiquetas (Tags) con Variables de entorno
+
+Al crear la Container App, el portal tiene dos conceptos similares:
+
+| Concepto | Para qué sirve | Dónde se configura |
+|----------|-----------------|-------------------|
+| **Etiquetas (Tags)** | Metadata del recurso Azure (billing, organización). Visibles para todos con acceso al portal | Pestaña "Etiquetas" |
+| **Variables de entorno** | Valores que el código lee con `process.env.X`. Son el equivalente del `.env` | Pestaña "Contenedor" → sección "Variables de entorno" |
+
+**Las API keys van en Variables de entorno, NUNCA en Etiquetas.** Las etiquetas son visibles para cualquier persona con acceso al resource group.
+
+### Paso 5 — Crear Container App del frontend
+
+1. Buscar **"Container Apps"** → **Crear**
+2. Datos básicos:
+
+| Campo | Valor |
+|-------|-------|
+| Grupo de recursos | `rg-rag-poc` |
+| Nombre | `ragfrontend` |
+| Origen de implementación | Imagen de contenedor |
+| Región | **West US 2** (misma que el backend) |
+| Entorno de Container Apps | **Seleccionar existente** → el mismo environment del backend |
+
+3. Contenedor:
+
+| Campo | Valor |
+|-------|-------|
+| Origen de la imagen | **Azure Container Registry** |
+| Registro | `acrragpoc2026` |
+| Imagen | `rag-frontend` |
+| Etiqueta de imagen | `v2` |
+| CPU y memoria | **0.25 vCPU, 0.5 GiB** |
+
+No necesita variables de entorno — la URL del backend ya está embebida en el build de Next.js.
+
+4. Entrada (Ingress):
+
+| Campo | Valor |
+|-------|-------|
+| Entrada | **Habilitado** |
+| Tráfico de entrada | **Aceptar tráfico desde cualquier lugar** |
+| Tipo de entrada | **HTTP** |
+| Puerto de destino | **3000** |
+
+5. Revisar y crear
+
+### Verificación del deploy
+
+```bash
+# Health check del backend
+curl https://ragbackend.gentlerock-23836e73.westus2.azurecontainerapps.io/health
+# → {"status":"ok","timestamp":"..."}
+
+# Pregunta de prueba
+curl -X POST https://ragbackend.gentlerock-23836e73.westus2.azurecontainerapps.io/ask \
+  -H "Content-Type: application/json" \
+  -d '{"question":"What are the penalties for HIPAA violations?"}'
+# → {"answer":"HIPAA violations can result in...","sources":["hipaa.txt","hitech.txt"],...}
+
+# Frontend
+# Abrir en browser: https://ragfrontend.gentlerock-23836e73.westus2.azurecontainerapps.io
+```
+
+### URLs finales del deploy
+
+| Servicio | URL |
+|----------|-----|
+| **Frontend** | https://ragfrontend.gentlerock-23836e73.westus2.azurecontainerapps.io |
+| **Backend API** | https://ragbackend.gentlerock-23836e73.westus2.azurecontainerapps.io |
+| **Health check** | https://ragbackend.gentlerock-23836e73.westus2.azurecontainerapps.io/health |
+| **Stats** | https://ragbackend.gentlerock-23836e73.westus2.azurecontainerapps.io/stats |
+
+### Flujo de actualización (cuando cambias código)
+
+```
+1. Editar código localmente
+
+2. Rebuild imagen:
+   docker compose build backend          # o frontend
+
+3. Tag + push:
+   docker tag ragazurenode-backend acrragpoc2026.azurecr.io/rag-backend:v3
+   docker push acrragpoc2026.azurecr.io/rag-backend:v3
+
+4. En el portal: Container App → Contenedores → Editar e implementar
+   → Cambiar etiqueta de imagen a v3 → Crear
+
+5. Azure descarga la nueva imagen y reinicia el container (~30s)
+```
+
+### Recursos Azure creados en esta fase
+
+| Recurso | Tipo | Costo |
+|---------|------|-------|
+| `acrragpoc2026` | Azure Container Registry (Basic) | ~$5/mes |
+| `rag-env` | Container Apps Environment | $0 (infraestructura compartida) |
+| `ragbackend` | Container App (0.25 vCPU, 0.5 GiB) | $0-17/mes (según uso) |
+| `ragfrontend` | Container App (0.25 vCPU, 0.5 GiB) | $0-17/mes (según uso) |
+
+---
+
 ## Archivos creados/modificados en esta fase
 
 | Archivo | Acción | Qué hace |
@@ -580,6 +866,7 @@ TOTAL:
 | `frontend/.dockerignore` | **Creado** | Excluye node_modules, .next del build del frontend |
 | `docker-compose.yml` | **Creado** | Orquesta backend + frontend con health check y env_file |
 | `frontend/next.config.mjs` | **Modificado** | Agregado `output: "standalone"` para builds Docker optimizados |
+| `src/config.js` | **Modificado** | Fallback de nombres de variables: acepta `EMBED_KEY` y `AZURE_EMBED_KEY` (Azure Container Apps bloquea prefijo AZURE_) |
 
 ---
 
@@ -594,3 +881,6 @@ TOTAL:
 | Orquestación | docker-compose | Un comando para todo | Scripts bash separados |
 | Health check | wget a /health | Alpine no tiene curl, reutiliza endpoint existente | Instalar curl (agrega tamaño) |
 | Dependency order | depends_on + service_healthy | Frontend espera que backend esté listo | Sin depends_on (race condition) |
+| Env var naming | Fallback `EMBED_KEY \|\| AZURE_EMBED_KEY` | Funciona en local (.env) y Azure (prefijo AZURE_ bloqueado) | Renombrar solo en .env (rompe local) |
+| Deploy platform | Azure Container Apps (Consumption) | Serverless, scale-to-zero, HTTPS gratis, mismo ecosistema Azure | Azure App Service, AKS, AWS ECS |
+| Container Registry | Azure Container Registry (Basic) | Integración nativa con Container Apps, privado | Docker Hub, GitHub CR (gratis pero público) |
