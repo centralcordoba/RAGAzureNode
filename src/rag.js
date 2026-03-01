@@ -7,6 +7,7 @@ const { RunnableSequence } = require("@langchain/core/runnables");
 const { getEmbeddings } = require("./embeddings");
 const { getChatModel } = require("./llm");
 const { hybridSearch } = require("./search");
+const { trackRequest } = require("./costs");
 const config = require("./config");
 
 /**
@@ -59,9 +60,12 @@ async function query(question) {
   // 5. Extract unique sources
   const sources = [...new Set(relevantDocs.map((d) => d.source))];
 
+  // 6. Track costs
+  const costs = trackRequest({ question, context, answer });
+
   const elapsed = Date.now() - startTime;
 
-  // 6. Logging
+  // 7. Logging
   const logEntry = {
     timestamp: new Date().toISOString(),
     question: question.substring(0, 100),
@@ -69,6 +73,7 @@ async function query(question) {
     sources,
     responseLength: answer.length,
     elapsedMs: elapsed,
+    costs,
   };
   console.log("[RAG Query]", JSON.stringify(logEntry));
 
@@ -77,6 +82,7 @@ async function query(question) {
     sources,
     chunksRetrieved: relevantDocs.length,
     elapsedMs: elapsed,
+    costs,
   };
 }
 

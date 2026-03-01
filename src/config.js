@@ -24,7 +24,14 @@ const config = {
   topK: 4,              // number of chunks to retrieve
 
   // Cost control
-  maxOutputTokens: 512, // limit LLM response length
+  maxOutputTokens: 512,       // limit LLM response length
+  maxQuestionLength: 500,     // max characters in a question
+  maxRequestsPerMinute: 10,   // rate limit per IP
+
+  // Cost tracking (approximate prices per 1M tokens)
+  costPerMillionEmbedTokens: 0.02,   // Azure OpenAI text-embedding-3-small
+  costPerMillionInputTokens: 0.02,   // Mistral Nemo input via OpenRouter
+  costPerMillionOutputTokens: 0.04,  // Mistral Nemo output via OpenRouter
 
   // Server
   port: process.env.PORT || 3001,

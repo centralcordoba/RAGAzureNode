@@ -15,8 +15,10 @@
     "@langchain/community": "^0.3.59",
     "@langchain/core": "^0.3.80",
     "@langchain/openai": "^0.3.17",
+    "cors": "^2.8.6",
     "dotenv": "^17.3.1",
     "express": "^4.22.1",
+    "express-rate-limit": "^8.2.1",
     "langchain": "^0.3.37"
   }
 }
