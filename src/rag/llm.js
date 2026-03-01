@@ -3,7 +3,7 @@
  * Configures the chat model via OpenRouter with cost controls.
  */
 const { ChatOpenAI } = require("@langchain/openai");
-const config = require("./config");
+const config = require("../config");
 
 /**
  * Returns a ChatOpenAI instance pointed at OpenRouter.

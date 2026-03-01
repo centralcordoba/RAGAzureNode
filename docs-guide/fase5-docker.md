@@ -168,9 +168,9 @@ node_modules
 .git
 .env
 frontend
-docs
+data
 docs-guide
-vectorstore.json
+scripts
 *.md
 ```
 
@@ -178,8 +178,9 @@ Excluye todo lo que no necesita el backend:
 - `node_modules` — se instala dentro del container (`npm ci`)
 - `.env` — se inyecta vía docker-compose, no se copia a la imagen
 - `frontend` — tiene su propio Dockerfile
-- `vectorstore.json` (~2.4MB) — ya no se usa, los datos están en Azure AI Search
-- `docs`, `*.md` — documentación, no código
+- `data` — documentos fuente, solo se necesitan para ingesta (offline)
+- `scripts` — script de ingesta, se ejecuta antes del deploy
+- `docs-guide`, `*.md` — documentación, no código
 
 ### `frontend/.dockerignore`
 

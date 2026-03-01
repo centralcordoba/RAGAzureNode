@@ -15,21 +15,21 @@ Healthcare Regulatory Compliance RAG system. Node.js backend (Express + LangChai
 | File | Purpose |
 |------|---------|
 | `src/index.js` | Express server, endpoints `/ask`, `/health`, `/stats`, rate limiting, input validation |
-| `src/rag.js` | RAG pipeline orchestration: embed → search → LLM → cost tracking |
-| `src/search.js` | Azure AI Search client: index creation, hybrid search (vector + BM25) |
-| `src/embeddings.js` | Azure OpenAI embeddings (text-embedding-3-small, 1536 dims) |
-| `src/llm.js` | ChatOpenAI via OpenRouter (Mistral Nemo) |
+| `src/rag/pipeline.js` | RAG pipeline orchestration: embed → search → LLM → cost tracking |
+| `src/rag/search.js` | Azure AI Search client: index creation, hybrid search (vector + BM25) |
+| `src/rag/embeddings.js` | Azure OpenAI embeddings (text-embedding-3-small, 1536 dims) |
+| `src/rag/llm.js` | ChatOpenAI via OpenRouter (Mistral Nemo) |
 | `src/config.js` | All configuration. Env vars use fallback pattern: `EMBED_KEY \|\| AZURE_EMBED_KEY` |
-| `src/security.js` | 10 regex patterns for prompt injection detection |
-| `src/costs.js` | Token estimation (~4 chars/token) and cost accumulator |
-| `src/ingest.js` | Document ingestion: read .txt → chunk (500/100) → embed → upload to Azure AI Search |
+| `src/middleware/security.js` | 10 regex patterns for prompt injection detection |
+| `src/utils/costs.js` | Token estimation (~4 chars/token) and cost accumulator |
+| `scripts/ingest.js` | Document ingestion: read .txt → chunk (500/100) → embed → upload to Azure AI Search |
 | `frontend/app/page.js` | Main UI: question input, example questions, answer card with sources and metrics |
 
 ## Commands
 
 ```bash
 npm start              # Start backend (port 3001)
-npm run ingest         # Ingest docs/ into Azure AI Search
+npm run ingest         # Ingest data/ into Azure AI Search
 cd frontend && npm run dev   # Start frontend dev server (port 3000)
 docker compose up -d   # Start both via Docker
 docker compose down    # Stop both

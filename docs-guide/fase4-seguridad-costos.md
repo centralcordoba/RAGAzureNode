@@ -196,7 +196,7 @@ Para un solo campo (`question: string, max 500`) una librería de validación es
 
 ---
 
-## Capa 3: Anti Prompt Injection (`src/security.js`)
+## Capa 3: Anti Prompt Injection (`src/middleware/security.js`)
 
 ### Qué es prompt injection
 
@@ -312,7 +312,7 @@ if (!validation.safe) {
 
 ---
 
-## Capa 4: Cost Tracking (`src/costs.js`)
+## Capa 4: Cost Tracking (`src/utils/costs.js`)
 
 ### Por qué trackear costos
 
@@ -598,8 +598,8 @@ npm install express-rate-limit
 
 | Archivo | Acción | Qué hace |
 |---------|--------|----------|
-| `src/security.js` | **Creado** | 10 regex patterns anti-injection + detección de chars especiales |
-| `src/costs.js` | **Creado** | Estimación de tokens, cálculo de costo por request, acumulador de sesión |
+| `src/middleware/security.js` | **Creado** | 10 regex patterns anti-injection + detección de chars especiales |
+| `src/utils/costs.js` | **Creado** | Estimación de tokens, cálculo de costo por request, acumulador de sesión |
 | `src/index.js` | **Modificado** | Rate limiting, validación de input, endpoint /stats, integración security.js |
 | `src/config.js` | **Modificado** | Agregados límites (maxOutputTokens, maxQuestionLength, maxRequestsPerMinute) y precios por modelo |
 | `frontend/app/page.js` | **Modificado** | Muestra Cost y Tokens en la tarjeta de respuesta |

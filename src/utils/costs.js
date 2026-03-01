@@ -2,7 +2,7 @@
  * Cost tracking module.
  * Estimates and accumulates token usage and costs per request.
  */
-const config = require("./config");
+const config = require("../config");
 
 // Approximate: 1 token ≈ 4 characters for English text
 const CHARS_PER_TOKEN = 4;

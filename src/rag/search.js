@@ -7,7 +7,7 @@ const {
   SearchIndexClient,
   AzureKeyCredential,
 } = require("@azure/search-documents");
-const config = require("./config");
+const config = require("../config");
 
 const credential = new AzureKeyCredential(config.azureSearchKey);
 

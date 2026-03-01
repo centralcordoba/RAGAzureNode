@@ -9,7 +9,7 @@
  * - Same infrastructure we'll use for Azure AI Search in Phase 2
  */
 const { AzureOpenAIEmbeddings } = require("@langchain/openai");
-const config = require("./config");
+const config = require("../config");
 
 function getEmbeddings() {
   return new AzureOpenAIEmbeddings({

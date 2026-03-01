@@ -5,9 +5,9 @@
 const express = require("express");
 const cors = require("cors");
 const rateLimit = require("express-rate-limit");
-const { query } = require("./rag");
-const { validateQuestion } = require("./security");
-const { getStats } = require("./costs");
+const { query } = require("./rag/pipeline");
+const { validateQuestion } = require("./middleware/security");
+const { getStats } = require("./utils/costs");
 const config = require("./config");
 
 const app = express();

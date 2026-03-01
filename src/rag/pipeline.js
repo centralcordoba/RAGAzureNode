@@ -7,8 +7,8 @@ const { RunnableSequence } = require("@langchain/core/runnables");
 const { getEmbeddings } = require("./embeddings");
 const { getChatModel } = require("./llm");
 const { hybridSearch } = require("./search");
-const { trackRequest } = require("./costs");
-const config = require("./config");
+const { trackRequest } = require("../utils/costs");
+const config = require("../config");
 
 /**
  * Anti-hallucination prompt template.

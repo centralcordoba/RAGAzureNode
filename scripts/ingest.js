@@ -7,11 +7,11 @@ const path = require("path");
 const crypto = require("crypto");
 const { RecursiveCharacterTextSplitter } = require("langchain/text_splitter");
 const { Document } = require("@langchain/core/documents");
-const { getEmbeddings } = require("./embeddings");
-const { createIndex, uploadDocuments } = require("./search");
-const config = require("./config");
+const { getEmbeddings } = require("../src/rag/embeddings");
+const { createIndex, uploadDocuments } = require("../src/rag/search");
+const config = require("../src/config");
 
-const DOCS_DIR = path.join(__dirname, "..", "docs");
+const DOCS_DIR = path.join(__dirname, "..", "data");
 
 /**
  * Load all .txt files from the docs directory.

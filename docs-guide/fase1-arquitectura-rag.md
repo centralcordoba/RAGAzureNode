@@ -19,9 +19,9 @@ Con RAG:  Usuario → Buscar en docs → LLM + contexto → Respuesta fundamenta
 ┌─────────────────────────────────────────────────────────────────┐
 │                     INGESTA (offline, una vez)                  │
 │                                                                 │
-│  Documentos    Chunking        Embeddings         Vector Store  │
-│  (.txt)    →   (split)    →   (Azure OpenAI)  →  (en memoria)  │
-│  5 archivos    55 chunks       1536 dimensiones    JSON disco   │
+│  Documentos    Chunking        Embeddings         Azure AI      │
+│  (.txt)    →   (split)    →   (Azure OpenAI)  →  Search        │
+│  5 archivos    55 chunks       1536 dimensiones    índice cloud  │
 └─────────────────────────────────────────────────────────────────┘
 
 ┌─────────────────────────────────────────────────────────────────┐
@@ -41,7 +41,7 @@ Con RAG:  Usuario → Buscar en docs → LLM + contexto → Respuesta fundamenta
 
 ## Componentes en detalle
 
-### 1. Documentos fuente (`docs/`)
+### 1. Documentos fuente (`data/`)
 
 Cinco archivos `.txt` sobre regulaciones healthcare de EEUU:
 
@@ -57,7 +57,7 @@ Cinco archivos `.txt` sobre regulaciones healthcare de EEUU:
 
 ---
 
-### 2. Chunking (`src/ingest.js`)
+### 2. Chunking (`scripts/ingest.js`)
 
 **Qué es:** Partir documentos largos en fragmentos pequeños que puedan ser buscados individualmente.
 
@@ -91,7 +91,7 @@ Resultado: chunks de ~500 chars con overlap de 100
 
 ---
 
-### 3. Embeddings (`src/embeddings.js`)
+### 3. Embeddings (`src/rag/embeddings.js`)
 
 **Qué es:** Convertir texto en vectores numéricos que capturan el significado semántico. Textos con significado similar producen vectores cercanos en el espacio.
 
@@ -118,22 +118,24 @@ Resultado: chunks de ~500 chars con overlap de 100
 
 ---
 
-### 4. Vector Store (`MemoryVectorStore`)
+### 4. Vector Store — Azure AI Search
+
+> **Nota:** En la versión original de la Fase 1 se usaba `MemoryVectorStore` (RAM + `vectorstore.json` en disco). En la Fase 2 se migró a **Azure AI Search**, que es la implementación actual.
 
 **Qué es:** Una base de datos que almacena vectores y permite buscar los más similares a un vector de consulta.
 
-**Implementación actual:** `MemoryVectorStore` de LangChain — almacena todo en RAM.
-
-**Persistencia:** Serializamos los vectores a `vectorstore.json` después de la ingesta. Cuando el server arranca, carga el JSON directamente sin re-generar embeddings.
+**Implementación actual:** Azure AI Search — servicio cloud con búsqueda híbrida (vector + keyword BM25).
 
 ```
-Ingesta:  docs → chunks → embeddings → RAM → vectorstore.json (disco)
-Server:   vectorstore.json (disco) → RAM → listo para queries
+Ingesta:  data/*.txt → chunks → embeddings → upload a Azure AI Search
+Consulta: pregunta → embedding → búsqueda híbrida → top 4 chunks
 ```
 
-**Por qué serializar a JSON:** Cada llamada a la API de embeddings cuesta dinero. Sin serialización, reiniciar el server significaría re-embeder los 55 chunks cada vez. Con el JSON, solo pagamos una vez.
-
-**Limitación:** Esto es solo para el PoC. En Fase 2 reemplazamos por Azure AI Search (persistente, escalable, búsqueda híbrida).
+**Ventajas sobre el enfoque original (MemoryVectorStore):**
+- Persistente: los datos no se pierden al reiniciar el server
+- Escalable: soporta millones de documentos
+- Búsqueda híbrida: combina vectorial + keyword para mejores resultados
+- Siempre disponible en la nube
 
 ---
 
@@ -159,7 +161,7 @@ Para regulaciones healthcare, 4 chunks (~2000 chars de contexto) es suficiente p
 
 ---
 
-### 6. Prompt Template anti-alucinación (`src/rag.js`)
+### 6. Prompt Template anti-alucinación (`src/rag/pipeline.js`)
 
 ```
 You are a healthcare regulatory compliance expert. Answer the question
@@ -193,7 +195,7 @@ Question: {question}
 
 ---
 
-### 7. LLM Chat (`src/llm.js`)
+### 7. LLM Chat (`src/rag/llm.js`)
 
 **Modelo:** `mistralai/mistral-nemo` via OpenRouter.
 
@@ -245,20 +247,26 @@ Content-Type: application/json
 
 ```
 RAGAzureNode/
-├── docs/                        # Documentos fuente
+├── data/                        # Documentos fuente
 │   ├── hipaa.txt
 │   ├── hitech.txt
 │   ├── 42cfr_part2.txt
 │   ├── fda_21cfr11.txt
 │   └── state_health_privacy_laws.txt
+├── scripts/
+│   └── ingest.js                # Pipeline de ingesta
 ├── src/
 │   ├── config.js                # Configuración centralizada
-│   ├── embeddings.js            # Azure OpenAI embeddings
-│   ├── llm.js                   # Mistral Nemo via OpenRouter
-│   ├── ingest.js                # Pipeline de ingesta
-│   ├── rag.js                   # Chain: retrieve → prompt → LLM
-│   └── index.js                 # Express server
-├── vectorstore.json             # Vectores serializados (no re-embed)
+│   ├── index.js                 # Express server
+│   ├── middleware/
+│   │   └── security.js          # Anti prompt injection
+│   ├── rag/
+│   │   ├── embeddings.js        # Azure OpenAI embeddings
+│   │   ├── llm.js               # Mistral Nemo via OpenRouter
+│   │   ├── pipeline.js          # Chain: retrieve → prompt → LLM
+│   │   └── search.js            # Azure AI Search client
+│   └── utils/
+│       └── costs.js             # Token estimation y cost tracking
 ├── .env                         # API keys (no se commitea)
 ├── .gitignore
 └── package.json
@@ -276,8 +284,8 @@ RAGAzureNode/
    42cfr.txt ──→ RecursiveCharacterTextSplitter ──→ 11 chunks ─┼→ Azure OpenAI
    fda.txt ────→ RecursiveCharacterTextSplitter ──→ 12 chunks ─┤   embeddings
    state.txt ──→ RecursiveCharacterTextSplitter ──→ 10 chunks ─┘      ↓
-                                                              vectorstore.json
-                                                              (55 vectores x 1536 dims)
+                                                              Azure AI Search
+                                                              (55 docs x 1536 dims)
 
 2. CONSULTA (POST /ask) - cada request
 
@@ -285,7 +293,7 @@ RAGAzureNode/
        ↓
    Azure OpenAI embedding (1 API call)
        ↓
-   Similaridad coseno vs 55 vectores
+   Búsqueda híbrida (vector + keyword) en Azure AI Search
        ↓
    Top 4 chunks más relevantes
        ↓

@@ -109,28 +109,32 @@ The system retrieves relevant chunks from a knowledge base of 5 US healthcare re
 
 ```
 RAGAzureNode/
+├── data/                         # Healthcare regulation .txt files
+├── scripts/
+│   └── ingest.js                 # Document ingestion: chunk → embed → upload
 ├── src/
-│   ├── index.js          # Express server, API endpoints, middleware
-│   ├── rag.js            # RAG pipeline: embed → search → LLM → response
-│   ├── search.js         # Azure AI Search: index creation, hybrid search
-│   ├── embeddings.js     # Azure OpenAI embeddings client
-│   ├── llm.js            # OpenRouter LLM client (Mistral Nemo)
-│   ├── ingest.js         # Document ingestion: chunk → embed → upload
-│   ├── security.js       # Prompt injection detection (10 regex patterns)
-│   ├── costs.js          # Token estimation and cost tracking
-│   └── config.js         # Centralized configuration
+│   ├── index.js                  # Express server, API endpoints, middleware
+│   ├── config.js                 # Centralized configuration
+│   ├── middleware/
+│   │   └── security.js           # Prompt injection detection (10 regex patterns)
+│   ├── rag/
+│   │   ├── pipeline.js           # RAG pipeline: embed → search → LLM → response
+│   │   ├── search.js             # Azure AI Search: index creation, hybrid search
+│   │   ├── embeddings.js         # Azure OpenAI embeddings client
+│   │   └── llm.js                # OpenRouter LLM client (Mistral Nemo)
+│   └── utils/
+│       └── costs.js              # Token estimation and cost tracking
 ├── frontend/
 │   ├── app/
-│   │   ├── page.js           # Main UI component
-│   │   ├── page.module.css   # CSS Modules styles
-│   │   ├── layout.js         # Root layout
-│   │   └── globals.css       # Base styles
-│   ├── Dockerfile            # Multi-stage build (deps → build → standalone)
+│   │   ├── page.js               # Main UI component
+│   │   ├── page.module.css       # CSS Modules styles
+│   │   ├── layout.js             # Root layout
+│   │   └── globals.css           # Base styles
+│   ├── Dockerfile                # Multi-stage build (deps → build → standalone)
 │   └── package.json
-├── docs/                     # Healthcare regulation .txt files
-├── Dockerfile                # Backend container
-├── docker-compose.yml        # Local orchestration
-└── .env                      # API keys (not committed)
+├── Dockerfile                    # Backend container
+├── docker-compose.yml            # Local orchestration
+└── .env                          # API keys (not committed)
 ```
 
 ## Getting Started
@@ -177,7 +181,7 @@ AZURE_SEARCH_INDEX=healthcare-regulations
 npm run ingest
 ```
 
-This reads the `.txt` files from `docs/`, splits them into chunks (500 chars, 100 overlap), generates embeddings, creates the Azure AI Search index, and uploads everything.
+This reads the `.txt` files from `data/`, splits them into chunks (500 chars, 100 overlap), generates embeddings, creates the Azure AI Search index, and uploads everything.
 
 ### 4. Run locally
 

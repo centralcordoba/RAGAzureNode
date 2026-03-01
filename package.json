@@ -4,7 +4,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "ingest": "node src/ingest.js"
+    "ingest": "node scripts/ingest.js"
   },
   "keywords": [],
   "author": "",

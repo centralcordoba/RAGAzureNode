@@ -23,7 +23,7 @@ Archivos .txt → Chunking → Embeddings → Upload a Azure AI Search
 
 ### Etapa 1: Carga de archivos
 
-Se leen los 5 archivos `.txt` del directorio `docs/`:
+Se leen los 5 archivos `.txt` del directorio `data/`:
 
 ```
 hipaa.txt                     → 3,166 caracteres
@@ -208,18 +208,18 @@ Cuando llega una pregunta, Azure AI Search ejecuta **dos búsquedas en paralelo*
 
 ## Código: los archivos de la Fase 2
 
-### `src/search.js` (nuevo)
+### `src/rag/search.js` (nuevo)
 
 Módulo que maneja toda la interacción con Azure AI Search:
 
 ```
-search.js
+src/rag/search.js
   ├── createIndex()       → Crea el índice con el esquema de campos
   ├── uploadDocuments()   → Sube los chunks al índice en batches
   └── hybridSearch()      → Ejecuta búsqueda híbrida (vector + keyword)
 ```
 
-### `src/ingest.js` (modificado)
+### `scripts/ingest.js` (modificado)
 
 Antes:
 ```
@@ -231,7 +231,7 @@ Después:
 load docs → chunk → embed → crear índice en Azure → subir documentos
 ```
 
-### `src/rag.js` (modificado)
+### `src/rag/pipeline.js` (modificado)
 
 Antes:
 ```
